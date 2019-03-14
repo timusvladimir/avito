@@ -41,15 +41,20 @@ sub parse_page {
 # item-description-title\"> <a class=\"item-description-title-link\" 
 # href=\"(.*?)\".*?>\n(.*?)\n.*?<div class=\"about\">\n\s*(\S*)/gs)
 
-#     while($text=~/<div class=\"item_table-wrapper\">.*?<a class="item-description-title-link"
+#        while($text=~/<div class=\"item_table-wrapper\">.*?<a class="item-description-title-link"
 # itemprop="url"
-# href=\"(.*?)\".*?>(.*?).*?<span
-# class=\"price \".*?>\n\s*(\S*)/gs)
-
-        while($text=~/<div class=\"item_table-wrapper\">.*?<a class="item-description-title-link"
+# href=\"(.*?)\".*?> <span itemprop=\"name"\>(\D*).*?<span
+# class=\"price \".*?>\n\s*(\d+)/gs)  
+ 
+# while($text=~/<div class=\"item_table-wrapper\">.*?<a class="item-description-title-link"
+# itemprop="url"
+# href=\"(.*?)\".*?> <span itemprop=\"name"\>(\D*).*?<span
+# class=\"price \".*?>\n\s*(\w+\s\w+)/gs)  
+  
+  while($text=~/<div class=\"item_table-wrapper\">.*?<a class="item-description-title-link"
  itemprop="url"
- href=\"(.*?)\".*?> <span itemprop=\"name"\>(\S*).*?<span
- class=\"price \".*?>\n\s*(\S*)/gs)  
+ href=\"(.*?)\".*?> <span itemprop=\"name"\>(\D*)span>.*?<span
+ class=\"price \".*?>\n\s*(\w+\s\w+)/gs)  
  
  
     {
@@ -60,11 +65,10 @@ sub parse_page {
         print "name ="; print "$name\n";        
         my $price=$3;
         print "price ="; print "$price\n";
-        $uri=~s/^\s+|\s+$//g;
-        $name=~s/^\s+|\s+$//g;
+       # $uri=~s/^\s+|\s+$//g;
+       # $name=~s/^\s+|\s+$//g;
+         $price=~s/^\s+|\s+$//g;
         $price=~s/&nbsp;//g;
-        $price=~s/^\s+|\s+$//g;
-       # $price=~s/&nbsp;//g;
 
         $page{"name"}{$uri}=$name;
         $page{"price"}{$uri}=$price;
